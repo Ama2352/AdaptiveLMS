@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from uuid import UUID
 from psycopg2.extras import RealDictCursor
-from ..core.database import get_db_connection
+from ..core.database import get_db_connection, release_db_connection
 from ..core.engine_logic import get_student_progress_logic
 from ..models.student import ProgressResponse
 
@@ -18,7 +18,7 @@ def get_students():
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     finally:
-        conn.close()
+        release_db_connection(conn)
 
 @router.get("/analytics/{student_id}")
 def get_student_analytics(student_id: UUID):
@@ -45,7 +45,7 @@ def get_student_analytics(student_id: UUID):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     finally:
-        conn.close()
+        release_db_connection(conn)
 
 @router.get("/student-progress/{student_id}", response_model=ProgressResponse)
 def get_student_progress(student_id: UUID):
@@ -56,4 +56,4 @@ def get_student_progress(student_id: UUID):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     finally:
-        conn.close()
+        release_db_connection(conn)

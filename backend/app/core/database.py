@@ -1,7 +1,26 @@
 import psycopg2
+from psycopg2 import pool
 from .config import DB_URL
 
+# Global connection pool
+_pool = None
+
+def init_db_pool():
+    global _pool
+    if _pool is None:
+        _pool = psycopg2.pool.ThreadedConnectionPool(
+            minconn=1,
+            maxconn=20,
+            dsn=DB_URL
+        )
+
 def get_db_connection():
-    if not DB_URL:
-        raise Exception("DB_URL not configured")
-    return psycopg2.connect(DB_URL)
+    global _pool
+    if _pool is None:
+        init_db_pool()
+    return _pool.getconn()
+
+def release_db_connection(conn):
+    global _pool
+    if _pool is not None and conn is not None:
+        _pool.putconn(conn)

@@ -2,6 +2,25 @@
 
 A professional education platform featuring an Adaptive Intelligence Engine based on ELO ratings and knowledge graph mastery.
 
+## 🌟 Key Features
+
+### 🧠 Adaptive Intelligence Engine
+
+- **Granular ELO Tracking**: Individual ability scores for every knowledge concept.
+- **Dynamic Question Selection**: AI selects questions matching the student's current mastery level (Weakest-Link strategy).
+- **Mastery Thresholds**: Concepts are marked as mastered based on ELO progression (Threshold: 1250).
+
+### 📊 Advanced Teacher Analytics
+
+- **Learning Trajectory Tracking**: Real-time line charts comparing student ELO vs. question difficulty.
+- **Diagnostic Insights**: "Total Growth" and "Remediation Alerts" to identify struggling students.
+- **Knowledge Breadth**: Track unique concept coverage and mastery percentages.
+
+### ⚡ Optimized Infrastructure
+
+- **High Performance**: Backend optimized with Database Connection Pooling and batched queries for <500ms latency.
+- **Robust Postgres Schema**: Includes student profiles, mastery logs, and relational concept mapping.
+
 ## 📁 Project Structure
 
 ```text
@@ -47,5 +66,5 @@ A professional education platform featuring an Adaptive Intelligence Engine base
 ## 🛠 Tech Stack
 
 - **Frontend**: React, Vite, Tailwind CSS (optional), Recharts, Lucide React
-- **Backend**: FastAPI, PostgreSQL, Psycopg2, Pydantic
+- **Backend**: FastAPI, PostgreSQL (Psycopg2), Pydantic
 - **Adaptive Engine**: Custom ELO-based recommendation and mastery logic

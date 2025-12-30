@@ -1,7 +1,7 @@
 import random
 from fastapi import APIRouter, HTTPException
 from psycopg2.extras import RealDictCursor
-from ..core.database import get_db_connection
+from ..core.database import get_db_connection, release_db_connection
 from ..core.config import MASTERY_THRESHOLD, BASE_K
 from ..models.engine import NextQuestionRequest, StatusResponse, QuestionResponse, SubmitAnswerRequest, SubmitResponse
 
@@ -58,6 +58,19 @@ def next_question(payload: NextQuestionRequest):
         if not candidates:
              return StatusResponse(status="error", message="No candidates found")
 
+        # Optimization: Batch fetch questions for all candidates
+        candidate_ids = [c['concept_id'] for c in candidates]
+        if not candidate_ids:
+             return StatusResponse(status="error", message="No candidates found")
+
+        cur.execute("SELECT * FROM questions WHERE concept_id = ANY(%s)", (candidate_ids,))
+        all_questions = cur.fetchall()
+        
+        # Group questions by concept_id
+        questions_by_concept = {}
+        for q in all_questions:
+            questions_by_concept.setdefault(q['concept_id'], []).append(q)
+
         candidates_by_elo = {}
         for c in candidates:
             elo = c['current_elo']
@@ -71,8 +84,7 @@ def next_question(payload: NextQuestionRequest):
             group = candidates_by_elo[elo]
             random.shuffle(group)
             for concept_cand in group:
-                cur.execute("SELECT * FROM questions WHERE concept_id = %s", (concept_cand['concept_id'],))
-                qs = cur.fetchall()
+                qs = questions_by_concept.get(concept_cand['concept_id'], [])
                 if qs:
                     target_concept = concept_cand
                     questions = qs
@@ -118,7 +130,7 @@ def next_question(payload: NextQuestionRequest):
         conn.rollback()
         raise HTTPException(status_code=500, detail=str(e))
     finally:
-        conn.close()
+        release_db_connection(conn)
 
 @router.post("/submit-answer", response_model=SubmitResponse)
 def submit_answer(payload: SubmitAnswerRequest):
@@ -176,4 +188,4 @@ def submit_answer(payload: SubmitAnswerRequest):
         conn.rollback()
         raise HTTPException(status_code=500, detail=str(e))
     finally:
-        conn.close()
+        release_db_connection(conn)

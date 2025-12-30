@@ -242,7 +242,9 @@ export default function TeacherDashboard() {
               {
                 label: "TOTAL GROWTH",
                 value: summary.totalGrowth,
-                color: "#10b981",
+                color: summary.totalGrowth.toString().startsWith("-")
+                  ? "#ef4444"
+                  : "#10b981",
               },
               {
                 label: "UNIQUE CONCEPTS",
