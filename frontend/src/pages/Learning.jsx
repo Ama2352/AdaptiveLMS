@@ -145,7 +145,12 @@ export default function Learning() {
               <span>Diff: {question.difficulty_elo}</span>
             </div>
 
-            <h2 style={{ marginTop: 0 }}>{question.content_text}</h2>
+            <h2 style={{ marginTop: 0 }}>
+              Question {question.question_id}:{" "}
+              {question.content_text
+                .replace(/\(Difficulty: \d+\)/, "")
+                .replace(/Question for \w+(\s|$)/, "")}
+            </h2>
 
             <div style={{ display: "grid", gap: "1rem", marginTop: "2rem" }}>
               {question.options.map((opt, idx) => {

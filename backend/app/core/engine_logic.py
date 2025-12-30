@@ -114,7 +114,7 @@ def get_student_progress_logic(student_id: str, conn):
         recommended = min(ready_concepts, key=lambda x: x['current_elo'])
         mastery_gap = MASTERY_THRESHOLD - recommended['current_elo']
         recommended['reason'] = "weakest_ready"
-        recommended['explanation'] = f"This is your weakest ready concept ({recommended['current_elo']} ELO). Focus here to unlock advanced topics!"
+        recommended['explanation'] = f"This is your weakest ready concept (Your Current ELO: {recommended['current_elo']}). Focus here to unlock advanced topics!"
         recommended['mastery_gap'] = mastery_gap
     
     # Needs attention (ready concepts with declining or low ELO)

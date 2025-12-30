@@ -102,64 +102,13 @@ export default function MasteryProfile({ data }) {
               {data.average_elo}
             </span>
           </div>
-          <div>
-            <span style={{ fontSize: "0.75rem", color: "#6b7280" }}>
-              Level:{" "}
-            </span>
-            <span
-              style={{
-                fontSize: "0.875rem",
-                fontWeight: "bold",
-                background: `${getLevelColor(data.level)}20`,
-                color: getLevelColor(data.level),
-                padding: "2px 8px",
-                borderRadius: "6px",
-              }}
-            >
-              {data.level}
-            </span>
-          </div>
         </div>
         <div style={{ fontSize: "0.875rem", color: "#6b7280" }}>
           {data.mastered_concepts} / {data.total_concepts} concepts mastered
         </div>
       </div>
 
-      {/* Quick Stats */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gap: "1rem",
-          borderLeft: "1px solid #e5e7eb",
-          paddingLeft: "2rem",
-        }}
-      >
-        <div style={{ textAlign: "center" }}>
-          <div
-            style={{ fontSize: "1.5rem", fontWeight: "bold", color: "#6366f1" }}
-          >
-            {data.streak || 0}
-          </div>
-          <div style={{ fontSize: "0.75rem", color: "#9ca3af" }}>Streak</div>
-        </div>
-        <div style={{ textAlign: "center" }}>
-          <div
-            style={{ fontSize: "1.5rem", fontWeight: "bold", color: "#10b981" }}
-          >
-            {data.total_questions}
-          </div>
-          <div style={{ fontSize: "0.75rem", color: "#9ca3af" }}>Total Q</div>
-        </div>
-        <div style={{ textAlign: "center" }}>
-          <div
-            style={{ fontSize: "1.5rem", fontWeight: "bold", color: "#f59e0b" }}
-          >
-            {data.today_questions}
-          </div>
-          <div style={{ fontSize: "0.75rem", color: "#9ca3af" }}>Today</div>
-        </div>
-      </div>
+      {/* Quick Stats hidden for demo */}
     </div>
   );
 }
