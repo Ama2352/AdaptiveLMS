@@ -54,29 +54,30 @@ export default function TeacherDashboard() {
       return { chartData: [], summary: null };
     }
 
-    let currentAbility = 1000;
     const accumulatedData = analytics.logs.map((log, index) => {
-      currentAbility += log.elo_change;
-
       return {
         step: index + 1,
         questionDiff: log.difficulty_elo || 1000,
-        studentElo: currentAbility,
+        studentElo: log.new_elo,
         concept: log.concept_id,
         outcome: log.is_correct ? "Correct" : "Incorrect",
         eloChange: log.elo_change,
-        newElo: currentAbility,
+        newElo: log.new_elo,
       };
     });
 
     const uniqueConcepts = new Set(analytics.logs.map((l) => l.concept_id))
       .size;
+
     const finalElo =
       accumulatedData.length > 0
         ? accumulatedData[accumulatedData.length - 1].newElo
         : 1000;
+
+    const initialElo =
+      analytics.logs.length > 0 ? analytics.logs[0].old_elo : 1000;
     const totalSteps = accumulatedData.length;
-    const totalGrowth = finalElo - 1000;
+    const totalGrowth = finalElo - initialElo;
 
     return {
       chartData: accumulatedData,
