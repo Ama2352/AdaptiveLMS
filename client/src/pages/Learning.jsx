@@ -195,53 +195,194 @@ export default function Learning() {
                 className="fade-in"
                 style={{
                   marginTop: "2rem",
-                  padding: "1rem",
+                  padding: "1.5rem",
                   background: feedback.isCorrect
                     ? "rgba(16, 185, 129, 0.1)"
                     : "rgba(239, 68, 68, 0.1)",
-                  borderRadius: "8px",
-                  border: `1px solid ${
+                  borderRadius: "12px",
+                  border: `2px solid ${
                     feedback.isCorrect ? "var(--success)" : "var(--error)"
                   }`,
                 }}
               >
                 <h3
                   style={{
-                    margin: "0 0 0.5rem 0",
+                    margin: "0 0 1rem 0",
                     color: feedback.isCorrect
                       ? "var(--success)"
                       : "var(--error)",
+                    fontSize: "1.5rem",
                   }}
                 >
-                  {feedback.isCorrect ? "Correct!" : "Incorrect"}
+                  {feedback.isCorrect ? "✅ Correct!" : "❌ Not quite"}
                 </h3>
-                <p>
-                  ELO Update: <strong>{feedback.oldElo}</strong> →{" "}
-                  <strong>{feedback.newElo}</strong>
-                  <span
+
+                <div
+                  style={{
+                    background: "rgba(99, 102, 241, 0.1)",
+                    padding: "0.75rem",
+                    borderRadius: "8px",
+                    marginBottom: "1rem",
+                  }}
+                >
+                  <div
                     style={{
-                      marginLeft: "0.5rem",
-                      color:
-                        feedback.change >= 0
-                          ? "var(--success)"
-                          : "var(--error)",
+                      fontSize: "0.875rem",
+                      color: "var(--text-secondary)",
+                      marginBottom: "0.25rem",
                     }}
                   >
-                    ({feedback.change > 0 ? "+" : ""}
-                    {feedback.change ? feedback.change.toFixed(1) : 0})
-                  </span>
-                </p>
+                    Practicing: <strong>{question.concept_id}</strong>
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "1rem",
+                    }}
+                  >
+                    <div>
+                      <span
+                        style={{
+                          fontSize: "0.875rem",
+                          color: "var(--text-secondary)",
+                        }}
+                      >
+                        ELO:{" "}
+                      </span>
+                      <strong
+                        style={{
+                          fontSize: "1.25rem",
+                          color: "var(--primary-color)",
+                        }}
+                      >
+                        {feedback.oldElo}
+                      </strong>
+                      <span
+                        style={{
+                          margin: "0 0.5rem",
+                          color: "var(--text-secondary)",
+                        }}
+                      >
+                        →
+                      </span>
+                      <strong
+                        style={{
+                          fontSize: "1.25rem",
+                          color:
+                            feedback.change >= 0
+                              ? "var(--success)"
+                              : "var(--error)",
+                        }}
+                      >
+                        {feedback.newElo}
+                      </strong>
+                      <span
+                        style={{
+                          marginLeft: "0.5rem",
+                          padding: "2px 8px",
+                          borderRadius: "6px",
+                          fontSize: "0.875rem",
+                          fontWeight: "bold",
+                          background:
+                            feedback.change >= 0
+                              ? "rgba(16, 185, 129, 0.2)"
+                              : "rgba(239, 68, 68, 0.2)",
+                          color:
+                            feedback.change >= 0
+                              ? "var(--success)"
+                              : "var(--error)",
+                        }}
+                      >
+                        {feedback.change > 0 ? "+" : ""}
+                        {feedback.change ? feedback.change.toFixed(1) : 0}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Progress to mastery */}
+                  {!feedback.mastered && (
+                    <div style={{ marginTop: "0.5rem" }}>
+                      <div
+                        style={{
+                          fontSize: "0.75rem",
+                          color: "var(--text-secondary)",
+                          marginBottom: "0.25rem",
+                        }}
+                      >
+                        Progress to mastery (1250 ELO):
+                      </div>
+                      <div
+                        style={{
+                          width: "100%",
+                          height: "8px",
+                          background: "rgba(0,0,0,0.1)",
+                          borderRadius: "4px",
+                          overflow: "hidden",
+                        }}
+                      >
+                        <div
+                          style={{
+                            width: `${Math.min(
+                              (feedback.newElo / 1250) * 100,
+                              100
+                            )}%`,
+                            height: "100%",
+                            background: "var(--primary-color)",
+                            transition: "width 0.5s ease",
+                          }}
+                        />
+                      </div>
+                      <div
+                        style={{
+                          fontSize: "0.75rem",
+                          color: "var(--text-secondary)",
+                          marginTop: "0.25rem",
+                        }}
+                      >
+                        {Math.max(1250 - feedback.newElo, 0)} points to go! 💪
+                      </div>
+                    </div>
+                  )}
+                </div>
+
                 {feedback.mastered && (
-                  <p style={{ color: "gold", fontWeight: "bold" }}>
-                    🏆 Concept Mastered!
-                  </p>
+                  <div
+                    style={{
+                      padding: "1rem",
+                      background:
+                        "linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)",
+                      borderRadius: "8px",
+                      color: "white",
+                      textAlign: "center",
+                      marginBottom: "1rem",
+                    }}
+                  >
+                    <div style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>
+                      🏆
+                    </div>
+                    <div style={{ fontSize: "1.25rem", fontWeight: "bold" }}>
+                      Concept Mastered!
+                    </div>
+                    <div style={{ fontSize: "0.875rem", opacity: 0.9 }}>
+                      You've achieved {feedback.newElo} ELO in{" "}
+                      {question.concept_id}
+                    </div>
+                  </div>
                 )}
 
                 <button
                   onClick={() => loadNextQuestion(true)}
-                  style={{ marginTop: "1rem", width: "100%" }}
+                  style={{
+                    marginTop: "1rem",
+                    width: "100%",
+                    padding: "1rem",
+                    fontSize: "1rem",
+                  }}
                 >
-                  Next Question
+                  {feedback.mastered
+                    ? "🎯 Next Concept"
+                    : "Continue Learning →"}
                 </button>
               </div>
             )}

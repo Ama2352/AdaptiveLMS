@@ -37,3 +37,8 @@ export const getStudents = async () => {
   const response = await api.get("/students");
   return response.data;
 };
+
+export const getStudentAnalytics = async (studentId) => {
+  const response = await api.get(`/analytics/${studentId}`);
+  return response.data;
+};
